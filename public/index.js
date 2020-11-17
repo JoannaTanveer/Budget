@@ -1,18 +1,34 @@
+import { populate } from "../models/transaction";
+import { db, addData, getTransactions } from "./db";
 let transactions = [];
 let myChart;
 
+renderOfflineStore();
+
+function renderOfflineStore() {
 fetch("/api/transaction")
   .then(response => {
     return response.json();
   })
   .then(data => {
     // save db data on global variable
-    transactions = data;
-
-    populateTotal();
-    populateTable();
-    populateChart();
+    if (navigator.onLine) {
+      transactions = data;
+      populate();
+    } else {
+      getTransactions().then(results => {
+      results.reverse();
+      transactions = [...results, ...data]
+      })
+    }
   });
+};
+
+function populate() {
+  populateTotal();
+  populateTable();
+  populateChart();
+}
 
 function populateTotal() {
   // reduce transaction amounts to a single total value
@@ -136,8 +152,8 @@ function sendTransaction(isAdding) {
   })
   .catch(err => {
     // fetch failed, so save in indexed db
-    saveRecord(transaction);
-
+    addData(transaction);
+    renderOfflineStore();
     // clear form
     nameEl.value = "";
     amountEl.value = "";
