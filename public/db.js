@@ -1,14 +1,14 @@
 let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedD
 
 let db;
-let request = indexedDB.open("offlineDB");
+let request = indexedDB.open("database", 1);
 
 request.onupgradeneeded = function(event) {
     var db = event.target.result;
    
     // Create an objectStore for this database
    
-    var objectStore = db.createObjectStore("toDoList", { keyPath: "taskTitle" }, { autoIncrement: true });
+    var objectStore = db.createObjectStore("offlineDB", { autoIncrement: true });
    
     // define what data items the objectStore will contain
    
@@ -16,9 +16,9 @@ request.onupgradeneeded = function(event) {
     objectStore.createIndex("value", "value", { unique: false });
     objectStore.createIndex("date", "date", { unique: false });
     
-    objectStore.createIndex("notified", "notified", { unique: false });
+    
    
-    note.innerHTML += '<li>Object store created.</li>';
+   
 };
 
 request.onsuccess = event => {
@@ -30,7 +30,7 @@ request.onsuccess = event => {
     }
 };
 
-export function addData(data) {
+function addData(data) {
     const transaction = db.transaction(['offlineDB'], 'readwrite');
     const store = transaction.objectStore('offlineDB');
 
@@ -41,7 +41,7 @@ function getAll() {
     // create a transaction on the pending db with readwrite access
     const transaction = db.transaction(["offlineDB"], "readwrite");
     // access your object store
-    store = transaction.objectStore("offlineDB");
+    let store = transaction.objectStore("offlineDB");
     // get all 
     const getAll = store.getAll();
   
@@ -59,17 +59,17 @@ function getAll() {
         .then(() => {
           
           const transaction = db.transaction(["offlineDB"], "readwrite");
-          store = transaction.objectStore("offlineDB");
+          let store = transaction.objectStore("offlineDB");
           store.clear();
         });
       }
     };
   }
 
-export function getTransactions() {
+function getTransactions() {
     return new Promise((resolve, reject) => {
     const transaction = db.transaction(["offlineDB"], "readwrite");
-    store = transaction.objectStore("offlineDB");
+    let store = transaction.objectStore("offlineDB");
     const getAll = store.getAll();
 
     getAll.onsuccess = function() {
@@ -77,4 +77,4 @@ export function getTransactions() {
     };
   })
 }
-  window.addEventListener("online", checkDatabase);
+  window.addEventListener("online", getAll);

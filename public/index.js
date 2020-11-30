@@ -1,34 +1,34 @@
-import { populate } from "../models/transaction";
-import { db, addData, getTransactions } from "./db";
+// import Transaction from "../models/transaction";
+// import { addData , getTransactions } from "./db";
 let transactions = [];
 let myChart;
 
-renderOfflineStore();
+// renderOfflineStore();
 
-function renderOfflineStore() {
-fetch("/api/transaction")
-  .then(response => {
-    return response.json();
-  })
-  .then(data => {
-    // save db data on global variable
-    if (navigator.onLine) {
-      transactions = data;
-      populate();
-    } else {
-      getTransactions().then(results => {
-      results.reverse();
-      transactions = [...results, ...data]
-      })
-    }
-  });
-};
+// function renderOfflineStore() {
+// fetch("/api/transaction")
+//   .then(response => {
+//     return response.json();
+//   })
+//   .then(data => {
+//     // save db data on global variable
+//     if (navigator.onLine) {
+//       transactions = data;
+//       populate();
+//     } else {
+//       getTransactions().then(results => {
+//       results.reverse();
+//       transactions = [...results, ...data]
+//       })
+//     }
+//   });
+// };
 
-function populate() {
+// function populate() {
   populateTotal();
   populateTable();
   populateChart();
-}
+// }
 
 function populateTotal() {
   // reduce transaction amounts to a single total value
