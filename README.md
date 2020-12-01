@@ -25,7 +25,7 @@ The technologies utilized in this application are as follows: MongoDB (database)
     
 ### Installation
     
-This application is deployed to Heroku [link](https://calm-journey-26270.herokuapp.com/)
+This application is deployed to Heroku [link](https://morning-crag-49382.herokuapp.com/)
 
 
 ### Usage
